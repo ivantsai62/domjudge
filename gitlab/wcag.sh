@@ -13,7 +13,6 @@ function section_end_internal() {
 	echo -e "section_end:`date +%s`:$1\r\e[0K"
 	trace_on
 }
-
 alias section_start='trace_off ; section_start_internal '
 alias section_end='trace_off ; section_end_internal '
 
@@ -99,8 +98,8 @@ do
 	do
 		section_start ${file//\//} $file
 		# T is reasonable amount of errors to allow to not break
-		su domjudge -c "pa11y -T $ACCEPTEDERR -E '#menuDefault > a > button' --reporter json ./$file" | python -m json.tool
-	        ERR=`su domjudge -c "pa11y -T $ACCEPTEDERR -E '#menuDefault > a > button' --reporter csv ./$file" | wc -l`
+		su domjudge -c "/node_modules/.bin/pa11y -T $ACCEPTEDERR -E '#menuDefault > a > button' --reporter json ./$file" | python3 -m json.tool
+	        ERR=`su domjudge -c "/node_modules/.bin/pa11y -T $ACCEPTEDERR -E '#menuDefault > a > button' --reporter csv ./$file" | wc -l`
 		FOUNDERR=$((ERR+FOUNDERR-1)) # Remove header row
 		section_end $file
 	done
