@@ -175,6 +175,13 @@ class Problem extends BaseApiEntity
     private $testcases;
 
     /**
+     * @ORM\OneToMany(targetEntity=ProblemAttachment::class, mappedBy="problem", orphanRemoval=true)
+     * @ORM\OrderBy({"name"="ASC"})
+     * @Serializer\Exclude()
+     */
+    private $attachments;
+
+    /**
      * Set probid
      *
      * @param integer $probId
@@ -511,10 +518,11 @@ class Problem extends BaseApiEntity
      */
     public function __construct()
     {
-        $this->testcases = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->testcases = new ArrayCollection();
         $this->submissions = new ArrayCollection();
         $this->clarifications = new ArrayCollection();
         $this->contest_problems = new ArrayCollection();
+        $this->attachments = new ArrayCollection();
     }
 
     /**
@@ -652,6 +660,37 @@ class Problem extends BaseApiEntity
     public function getClarifications()
     {
         return $this->clarifications;
+    }
+
+    public function addAttachment(ProblemAttachment $attachment): self
+    {
+        if (!$this->attachments->contains($attachment)) {
+            $this->attachments[] = $attachment;
+            $attachment->setProblem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttachment(ProblemAttachment $attachment): self
+    {
+        if ($this->attachments->contains($attachment)) {
+            $this->attachments->removeElement($attachment);
+            // set the owning side to null (unless already changed)
+            if ($attachment->getProblem() === $this) {
+                $attachment->setProblem(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProblemAttachment[]
+     */
+    public function getAttachments(): Collection
+    {
+        return $this->attachments;
     }
 
     /**
