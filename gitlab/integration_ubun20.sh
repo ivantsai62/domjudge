@@ -135,7 +135,7 @@ section_end submitting
 
 section_start judging "Waiting until all submissions are judged"
 # wait for and check results
-NUMSUBS=$(curl --fail http://admin:$ADMINPASS@localhost/domjudge/api/contests/2/submissions | python3 -mjson.tool | grep -c '"id":')
+NUMSUBS=$(curl --fail http://admin:$ADMINPASS@localhost/domjudge/api/contests/2/submissions | python -mjson.tool | grep -c '"id":')
 export COOKIEJAR
 COOKIEJAR=$(mktemp --tmpdir)
 export CURLOPTS="--fail -sq -m 30 -b $COOKIEJAR"

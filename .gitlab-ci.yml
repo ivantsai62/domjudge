@@ -11,7 +11,7 @@ include:
 
 check syntax:
   stage: test
-  image: domjudge/gitlabci:1.0
+  image: domjudge/gitlabci:2.0
   script:
     - ./gitlab/syntax.sh
 
@@ -31,7 +31,7 @@ check_w3c_html:
   before_script:
     # Takes about 1 minute to pull
     - echo -e "section_start:`date +%s`:docker\r\e[0Kdocker pull"
-    - time docker pull domjudge/gitlabci:1.0
+    - time docker pull domjudge/gitlabci:2.0
     - echo -e "section_end:`date +%s`:docker\r\e[0K"
   image: docker:stable
   services:
@@ -47,7 +47,7 @@ check_w3c_html:
       -v $CI_PROJECT_DIR:$CI_PROJECT_DIR \
       --net=host \
       -e "TERM=xterm-256color" -e "HOME=$HOME" -e "USER=$USER" -e "MARIADB_PORT_3306_TCP_ADDR=$MARIADB_PORT_3306_TCP_ADDR" -e "MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD" \
-      domjudge/gitlabci:1.0 /bin/bash -eo pipefail -c "umask 0002; cd $CI_PROJECT_DIR; script --return -qfc \"./gitlab/html.sh\" /dev/null | ts \"[%F %T]\" "
+      domjudge/gitlabci:2.0 /bin/bash -eo pipefail -c "umask 0002; cd $CI_PROJECT_DIR; script --return -qfc \"./gitlab/html.sh\" /dev/null | ts \"[%F %T]\" "
   artifacts:
     when: always
     paths:
@@ -59,7 +59,7 @@ check_wcag:
   before_script:
     # Takes about 1 minute to pull
     - echo -e "section_start:`date +%s`:docker\r\e[0Kdocker pull"
-    - time docker pull domjudge/gitlabci:1.0
+    - time docker pull domjudge/gitlabci:2.0
     - echo -e "section_end:`date +%s`:docker\r\e[0K"
   image: docker:stable
   services:
@@ -75,7 +75,7 @@ check_wcag:
       -v $CI_PROJECT_DIR:$CI_PROJECT_DIR \
       --net=host \
       -e "TERM=xterm-256color" -e "HOME=$HOME" -e "USER=$USER" -e "MARIADB_PORT_3306_TCP_ADDR=$MARIADB_PORT_3306_TCP_ADDR" -e "MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD" \
-      domjudge/gitlabci:1.0 /bin/bash -eo pipefail -c "umask 0002; cd $CI_PROJECT_DIR; script --return -qfc \"./gitlab/wcag.sh\" /dev/null | ts \"[%F %T]\" "
+      domjudge/gitlabci:2.0 /bin/bash -eo pipefail -c "umask 0002; cd $CI_PROJECT_DIR; script --return -qfc \"./gitlab/wcag.sh\" /dev/null | ts \"[%F %T]\" "
   artifacts:
     when: always
     paths:
@@ -83,7 +83,7 @@ check_wcag:
 
 run unit tests:
   stage: test
-  image: domjudge/gitlabci:1.0
+  image: domjudge/gitlabci:2.0
   # Disabled for now as it drastically speeds up running unit tests and we don't use it yet
   # before_script:
   #   - apt-get update -yqq
@@ -111,7 +111,8 @@ integration:
   before_script:
     # Takes about 1 minute to pull
     - echo -e "section_start:`date +%s`:docker[collapsed=true]\r\e[0Kdocker pull"
-    - time docker pull domjudge/gitlabci:1.0
+    - echo -e "section_start:`date +%s`:docker\r\e[0Kdocker pull"
+    - time docker pull domjudge/gitlabci:2.0
     - echo -e "section_end:`date +%s`:docker\r\e[0K"
   image: docker:stable
   services:
@@ -128,6 +129,103 @@ integration:
       --net=host \
       -e "TERM=xterm-256color" -e "HOME=$HOME" -e "USER=$USER" -e "MARIADB_PORT_3306_TCP_ADDR=$MARIADB_PORT_3306_TCP_ADDR" -e "MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD" \
       domjudge/gitlabci:1.0 /bin/bash -eo pipefail -c "umask 0002; cd $CI_PROJECT_DIR; script --return -qfc \"./gitlab/integration.sh\" /dev/null | ts \"[%F %T]\" "
+  artifacts:
+    when: always
+    paths:
+      - gitlabartifacts
+# TODO: Re-enable when gitlab is in better shape...
+#  cache:
+#    key: integration
+#    paths:
+#      - lib/vendor/
+#      - chroot
+
+integration_20:
+  stage: test
+  before_script:
+    # Takes about 1 minute to pull
+    - echo -e "section_start:`date +%s`:docker[collapsed=true]\r\e[0Kdocker pull"
+    - echo -e "section_start:`date +%s`:docker\r\e[0Kdocker pull"
+    - time docker pull domjudge/gitlabci:2.0
+    - echo -e "section_end:`date +%s`:docker\r\e[0K"
+  image: docker:stable
+  services:
+    - docker:19-dind
+    - mariadb
+  variables:
+    MYSQL_ROOT_PASSWORD: password
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+  script:
+  - |
+    docker run --privileged \
+      -v $CI_PROJECT_DIR:$CI_PROJECT_DIR \
+      --net=host \
+      -e "TERM=xterm-256color" -e "HOME=$HOME" -e "USER=$USER" -e "MARIADB_PORT_3306_TCP_ADDR=$MARIADB_PORT_3306_TCP_ADDR" -e "MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD" \
+      domjudge/gitlabci:2.0 /bin/bash -eo pipefail -c "umask 0002; cd $CI_PROJECT_DIR; script --return -qfc \"./gitlab/integration_ubun20.sh\" /dev/null | ts \"[%F %T]\" "
+  artifacts:
+    when: always
+    paths:
+      - gitlabartifacts
+# TODO: Re-enable when gitlab is in better shape...
+#  cache:
+#    key: integration
+#    paths:
+#      - lib/vendor/
+#      - chroot
+
+integration_18:
+  stage: test
+  before_script:
+    # Takes about 1 minute to pull
+    - echo -e "section_start:`date +%s`:docker[collapsed=true]\r\e[0Kdocker pull"
+    - echo -e "section_start:`date +%s`:docker\r\e[0Kdocker pull"
+    - time docker pull domjudge/gitlabci:1.0
+    - echo -e "section_end:`date +%s`:docker\r\e[0K"
+  image: docker:stable
+  services:
+    - docker:19-dind
+    - mariadb
+  variables:
+    MYSQL_ROOT_PASSWORD: password
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+  script:
+  - |
+    docker run --privileged \
+      -v $CI_PROJECT_DIR:$CI_PROJECT_DIR \
+      --net=host \
+      -e "TERM=xterm-256color" -e "HOME=$HOME" -e "USER=$USER" -e "MARIADB_PORT_3306_TCP_ADDR=$MARIADB_PORT_3306_TCP_ADDR" -e "MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD" \
+      domjudge/gitlabci:1.0 /bin/bash -eo pipefail -c "umask 0002; cd $CI_PROJECT_DIR; script --return -qfc \"./gitlab/integration_ubun18.sh\" /dev/null | ts \"[%F %T]\" "
+  artifacts:
+    when: always
+    paths:
+      - gitlabartifacts
+# TODO: Re-enable when gitlab is in better shape...
+#  cache:
+#    key: integration
+#    paths:
+#      - lib/vendor/
+#      - chroot
+
+integration_dind:
+  stage: test
+  before_script:
+    # Takes about 1 minute to pull
+    - echo -e "section_start:`date +%s`:docker[collapsed=true]\r\e[0Kdocker pull"
+    - echo -e "section_start:`date +%s`:docker\r\e[0Kdocker pull"
+    - time docker pull domjudge/gitlabci:1.0
+    - echo -e "section_end:`date +%s`:docker\r\e[0K"
+  image: docker:stable
+  services:
+    - docker:19-dind
+    - mariadb
+  variables:
+    MYSQL_ROOT_PASSWORD: password
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+  script:
+    - ./gitlab/integration_ubun18.sh
   artifacts:
     when: always
     paths:
