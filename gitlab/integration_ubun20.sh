@@ -34,6 +34,7 @@ function finish() {
 	cp /tmp/judgedaemon.log "$gitlabartifacts/judgedaemon.log"
 	cp /proc/cmdline "$gitlabartifacts/cmdline"
 	cp /chroot/domjudge/etc/apt/sources.list "$gitlabartifacts/sources.list"
+	cp /chroot/domjudge/debootstrap/debootstrap.log "$gitlabartifacts/debootstrap.log"
 	cp "${DIR}/misc-tools/icpctools/*json" "$gitlabartifacts/"
 }
 trap finish EXIT
