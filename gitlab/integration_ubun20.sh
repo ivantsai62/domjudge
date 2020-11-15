@@ -90,6 +90,7 @@ sudo bin/create_cgroups
 
 if [ ! -d ${DIR}/chroot/domjudge/ ]; then
 	cd ${DIR}/misc-tools
+	ls / > "$gitlabartifacts/ubun_20.fs"
 	time sudo ./dj_make_chroot -a amd64 |& tee "$gitlabartifacts/dj_make_chroot.log"
 fi
 section_end judgehost
