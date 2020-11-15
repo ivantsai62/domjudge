@@ -223,6 +223,8 @@ integration_dind:
   script:
     - ls
     - ls gitlab
+    - whereis bash
+    - gitlab/integration_ubun18.sh
     - ./gitlab/integration_ubun18.sh
   artifacts:
     when: always
