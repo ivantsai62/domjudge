@@ -34,8 +34,7 @@ function finish() {
 	cp /tmp/judgedaemon.log "$gitlabartifacts/judgedaemon.log"
 	cp /proc/cmdline "$gitlabartifacts/cmdline"
 	cp /chroot/domjudge/etc/apt/sources.list "$gitlabartifacts/sources.list"
-        cp /builds/DOMjudge/domjudge/chroot/domjudge/debootstrap/debootstrap.log "$gitlabartifacts/debootstrap_build.log"
-	cp /chroot/domjudge/debootstrap/debootstrap.log "$gitlabartifacts/debootstrap.log"
+        cp /builds/DOMjudge/domjudge/chroot/domjudge/debootstrap/debootstrap.log "$gitlabartifacts/debootstrap.log"
 	cp "${DIR}/misc-tools/icpctools/*json" "$gitlabartifacts/"
 }
 trap finish EXIT
@@ -94,8 +93,6 @@ if [ ! -d ${DIR}/chroot/domjudge/ ]; then
 	time sudo ./dj_make_chroot -a amd64 |& tee "$gitlabartifacts/dj_make_chroot.log"
 fi
 section_end judgehost
-
-exit 1
 
 section_start more_setup "Remaining setup (e.g. starting judgedaemon)"
 # download domjudge-scripts for API check
