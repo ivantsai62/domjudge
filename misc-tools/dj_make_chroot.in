@@ -249,7 +249,7 @@ if [ -n "$EXCLUDEDEBS" ]; then
 	EXCLUDEOPT="--exclude=$EXCLUDEDEBS"
 fi
 
-BOOTSTRAP_COMMAND="/usr/sbin/debootstrap"
+BOOTSTRAP_COMMAND="/usr/sbin/debootstrap --keep-debootstrap-dir"
 if [ -n "$DEBPROXY" ]; then
     BOOTSTRAP_COMMAND="http_proxy=\"$DEBPROXY\" $BOOTSTRAP_COMMAND"
 fi
