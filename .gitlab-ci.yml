@@ -207,25 +207,19 @@ integration_18:
 
 integration_dind:
   stage: test
-  before_script:
-    # Takes about 1 minute to pull
-    - echo -e "section_start:`date +%s`:docker[collapsed=true]\r\e[0Kdocker pull"
-    - time docker pull domjudge/gitlabci:1.0
-    - echo -e "section_end:`date +%s`:docker\r\e[0K"
-  image: docker:stable
+  image: domjudge/gitlabci:1.0
   services:
-    - docker:19-dind
     - mariadb
   variables:
     MYSQL_ROOT_PASSWORD: password
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_DRIVER: overlay2
   script:
-    - gitlab/integration_ubun18.sh
+    - ./gitlab/integration_ubun18.sh
   artifacts:
     when: always
     paths:
-      - bash gitlab/artifacts
+      - gitlabartifacts
 # TODO: Re-enable when gitlab is in better shape...
 #  cache:
 #    key: integration
