@@ -93,6 +93,8 @@ if [ ! -d ${DIR}/chroot/domjudge/ ]; then
 fi
 section_end judgehost
 
+exit 1
+
 section_start more_setup "Remaining setup (e.g. starting judgedaemon)"
 # download domjudge-scripts for API check
 cd $HOME
