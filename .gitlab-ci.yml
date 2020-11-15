@@ -156,7 +156,7 @@ integration_20:
     DOCKER_DRIVER: overlay2
   script:
   - |
-    docker run \
+    docker run --privileged \
       -v $CI_PROJECT_DIR:$CI_PROJECT_DIR \
       --net=host \
       -e "TERM=xterm-256color" -e "HOME=$HOME" -e "USER=$USER" -e "MARIADB_PORT_3306_TCP_ADDR=$MARIADB_PORT_3306_TCP_ADDR" -e "MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD" \
@@ -165,12 +165,6 @@ integration_20:
     when: always
     paths:
       - gitlabartifacts
-# TODO: Re-enable when gitlab is in better shape...
-#  cache:
-#    key: integration
-#    paths:
-#      - lib/vendor/
-#      - chroot
 
 integration_18:
   stage: test
@@ -198,12 +192,6 @@ integration_18:
     when: always
     paths:
       - gitlabartifacts
-# TODO: Re-enable when gitlab is in better shape...
-#  cache:
-#    key: integration
-#    paths:
-#      - lib/vendor/
-#      - chroot
 
 integration_dind:
   stage: test
@@ -220,9 +208,4 @@ integration_dind:
     when: always
     paths:
       - gitlabartifacts
-# TODO: Re-enable when gitlab is in better shape...
-#  cache:
-#    key: integration
-#    paths:
-#      - lib/vendor/
-#      - chroot
+
