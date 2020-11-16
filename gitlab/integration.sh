@@ -88,7 +88,7 @@ sudo bin/create_cgroups
 
 if [ ! -d ${DIR}/chroot/domjudge/ ]; then
 	cd ${DIR}/misc-tools
-	time sudo ./dj_make_chroot -a amd64 |& tee "$gitlabartifacts/dj_make_chroot.log"
+	time sudo ./dj_make_chroot -a amd64 -R focal |& tee "$gitlabartifacts/dj_make_chroot.log"
 fi
 section_end judgehost
 

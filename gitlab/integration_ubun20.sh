@@ -101,11 +101,9 @@ sudo bin/create_cgroups
 if [ ! -d ${DIR}/chroot/domjudge/ ]; then
 	cd ${DIR}/misc-tools
 	ls / > "$gitlabartifacts/ubun_20.fs"
-	time sudo ./dj_make_chroot -a amd64 -R bionic |& tee "$gitlabartifacts/dj_make_chroot.log"
+	time sudo ./dj_make_chroot -a amd64 -R focal |& tee "$gitlabartifacts/dj_make_chroot.log"
 fi
 section_end judgehost
-
-exit 1
 
 section_start more_setup "Remaining setup (e.g. starting judgedaemon)"
 # download domjudge-scripts for API check
