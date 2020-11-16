@@ -90,6 +90,7 @@ for automount in `mount | cut -d' ' -f3`
 do
 	if [ -d $automount ]; then
 		cd $automount
+		find ./ 1>/dev/zero
 	else
 		cat $automount 1>/dev/zero
 	fi
