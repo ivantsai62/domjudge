@@ -88,7 +88,11 @@ sudo chmod 400 /etc/sudoers.d/sudoers-domjudge
 # Make all mounts actually mounted (Possible docker problem)
 for automount in `mount | cut -d' ' -f3`
 do
-	cd $automount
+	if [ -d $automount ]; then
+		cd $automount
+	else
+		cat $automount 1>/dev/zero
+	fi
 done
 sudo bin/create_cgroups
 
