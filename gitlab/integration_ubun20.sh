@@ -85,6 +85,11 @@ section_start judgehost "Configure judgehost"
 cd /opt/domjudge/judgehost/
 sudo cp /opt/domjudge/judgehost/etc/sudoers-domjudge /etc/sudoers.d/
 sudo chmod 400 /etc/sudoers.d/sudoers-domjudge
+# Make all mounts actually mounted (Possible docker problem)
+for automount in `mount | cut -d' ' -f3`
+do
+	cd $automount
+done
 sudo bin/create_cgroups
 
 if [ ! -d ${DIR}/chroot/domjudge/ ]; then
