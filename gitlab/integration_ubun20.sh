@@ -94,6 +94,7 @@ do
 		cat $automount 1>/dev/zero
 	fi
 done
+cd /opt/domjudge/judgehost/
 sudo bin/create_cgroups
 
 if [ ! -d ${DIR}/chroot/domjudge/ ]; then
