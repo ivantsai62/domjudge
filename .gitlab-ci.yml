@@ -169,7 +169,6 @@ integration_20priv:
 
 integration_20privbind:
   stage: test
-  tags: [calca]
   before_script:
     # Takes about 1 minute to pull
     - echo -e "section_start:`date +%s`:docker[collapsed=true]\r\e[0Kdocker pull"
